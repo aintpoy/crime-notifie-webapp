@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+#color
+BLACK=`tput setaf 0`
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+YELLOW=`tput setaf 3`
+BLUE=`tput setaf 4`
+MAGENTA=`tput setaf 5`
+CYAN=`tput setaf 6`
+WHITE=`tput setaf 7`
+BOLD=`tput bold`
+RESET=`tput sgr0`
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" = "main" ]; then
+    echo "Warning: branch - $branch"
+	echo "${RED}Can not commit on protected [$branch] branch please proceed with develop branch${RED}"
+    echo "Please create a pull request when merging on protected branch"
+    exit 1
+fi
+
+if [ "$branch" = "staging" ]; then
+    echo "Warning: branch - $branch"
+	echo "${RED}Can not commit on protected [$branch] branch please proceed with develop branch${RED}"
+    echo "Please create a pull request when merging on protected branch"
+    exit 1
+fi
+
+echo ""
+echo -e "[ Husky ] Checking ${RED}errors${RESET} before commiting"
+echo -e "[ Husky ] In ${GREEN}Progress${RESET} please wait: \n"
+
+npm run lint
+
+echo -e "[ Husky ] ${GREEN}Success${RESET}"
+echo ""
